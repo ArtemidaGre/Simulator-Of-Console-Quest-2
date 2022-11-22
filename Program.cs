@@ -94,10 +94,15 @@ namespace Main_code
     }
     class House_rus
     {
-        private static bool CodeApply, ButtonIsOpened;
+        
+        void CCS() {Thread CC = new(ClearConsole);; CC.Start();}
+        private static bool KnifeInYashik = false, ButtonIsOpened = false, KnifeInSafe = false, coins1 = false, coins2 = false;
         public static bool Rub100 = false;
+        private static int TryCount;
         public static void ComeInHouse_rus(bool FirstTime = false)
         {
+            House_rus House = new();
+            House.CCS();
             if (FirstTime) { Console.Write("Вы вошли в свой дом!\nС чего хотите начать?\n1.Спальня\n2.гостинная\n3.подвал\n4.кухня\n>"); }
             else { Console.Write("Куда пойдете?\n1.Спальня\n2.Гостинная\n3.Подвал\n4.Кухня\n>"); };
             string choose = Console.ReadLine();
@@ -106,6 +111,13 @@ namespace Main_code
             else if (choose == "3" | choose == "Подвал" | choose == "подвал") { }
             else if (choose == "4" | choose == "Кухня" | choose == "кухня") { }
             else { ComeInHouse_rus(); }
+        }
+        private void ClearConsole()
+        {
+            do
+            {
+                if (TryCount > 5) { Console.Clear(); }
+            }while(true);
         }
         public static void Room1()
         {
@@ -120,6 +132,7 @@ namespace Main_code
                 if (choose == "3" | choose == "Кровать" | choose == "кровать") { Bed(); }
                 if (choose == "4" | choose == "хрень" | choose == "Какая-то хрень из которой вылезет монстр") { Shit(); }
                 if (choose == "5" | choose == "выйти" | choose == "Выйти"| choose == "Выйти из команты") { IsIn = false; }
+                TryCount++;
             } while (IsIn);
         }
         private static bool Shkaf()
@@ -131,8 +144,9 @@ namespace Main_code
                 Console.Write("Что вы хоите сделать?\n1.Взять 100 рублей\n2.Нажать кноопку\n3.\n4.\nЕсли ничего - 5\n>");
                 choose = Console.ReadLine();
                 if (choose == "5" | choose == "Если ничего - 5") { break; }
-                else if (choose == "1" | choose == "1.Взять 100 рублей") { Console.WriteLine("Вы взяли 100 рублей :)");Rub100 = true; }
+                else if (choose == "1" | choose == "1.Взять 100 рублей") { if (!Rub100) { Rub100 = true; Console.WriteLine("Вы взяли 100 рублей"); } else { Console.WriteLine("Вы уже взяли 100 рублей!"); } }
                 else if (choose == "2" | choose == "2.Нажать кнопку") { ButtonIsOpened = true; Console.WriteLine("Вы услышали какой-то звук..."); }
+                TryCount++;
             } while (true);
             return false;
         }
@@ -141,15 +155,20 @@ namespace Main_code
             Console.WriteLine("В ящике вы видите:\n1.Сейф\n2.Ножик для резки бананов");
             string choose = Console.ReadLine();
             if (choose == "1" | choose == "Сейф" | choose == "сейф") { if (ButtonIsOpened) { Console.WriteLine("Сейф открыт!"); Safe(); } else { Console.WriteLine("Несмотря на то, что сейф ваш, вы не помните как его открыть..."); } }
+            else if (choose == "2" | choose == "Нож" | choose == "2.Ножик для резки бананов") { if (KnifeInYashik) { Russian.Gamer.SetDamage(5); Console.WriteLine("Вы взяли нож!"); KnifeInYashik = true; } else { Console.WriteLine("Нож уже у вас!"); } }
+            TryCount++;
         }
         private static void Safe()
         {
-            Console.WriteLine("Вы открыли сейф! В нем есть: \n1.Меч короля Картофеля\n2.");
+            Console.Write("Вы открыли сейф! В нем есть: \n1.Меч короля Картофеля\n2.100 рублей\n>");
             string choose = Console.ReadLine();
+            if (choose == "100 рублей" | choose == "2") { if (!coins1) { Russian.Gamer.SetCoins(100); Console.WriteLine("Вы взяли 100 рублей"); } }
+            else if (choose == "Меч короля Картофеля" | choose == "1") { if (KnifeInSafe) { Russian.Gamer.SetDamage(10); Console.WriteLine("Вы взяли меч!"); KnifeInSafe = true; } else { Console.WriteLine("Меч уже у вас!"); } }
         }
         private static void Bed()
         {
-
+            Thread.Sleep(7000);
+            Console.WriteLine("Вы поспали!");
         }
         private static void Shit()
         {
@@ -160,6 +179,7 @@ namespace Main_code
         {
 
         }
+        public static void SetFalseAll() { KnifeInSafe = false; KnifeInYashik = false; ButtonIsOpened = false; }
     }
     class English : Player
     {
@@ -200,8 +220,8 @@ namespace Main_code
             Console.Clear();
             Console.WriteLine("Episode 2");
             Console.WriteLine("You have come to your house!");
-            house_rus.ComeInHouse_rus(true);
-            if (house_rus.Rub100 == true) { Gamer.SetCoins(100); }
+            House_rus.ComeInHouse_rus(true);
+            if (House_rus.Rub100 == true) { Gamer.SetCoins(100); }
         }
     }
     public class House_eng
@@ -265,5 +285,6 @@ namespace Main_code
         {
 
         }
+        
     }
 }

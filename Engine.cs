@@ -80,6 +80,13 @@ namespace Engine
                 else { return true; }
             }
         }
+        class BattleV2
+        {
+            public static bool Sbattle_rus(int hp = 100, int damage = 15, int ehp = 70, int edamage = 23)
+            {
+                return true;
+            }
+        }
     }
     namespace OuterSystems
     {
